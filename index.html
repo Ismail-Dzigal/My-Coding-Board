@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <title>My Coding Board</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+
+    <style type="text/css">
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+    
+      #navbar {
+        width: 100%;
+        height: 30px;
+        background-color: grey;
+        padding: 5px;
+      }
+
+      #title {
+        font-weight: bold;
+        padding: 5px;
+        font-size: 120%;
+        float: left;
+      }
+
+      #button-container {
+        width: 350px;
+        margin: 0 auto;
+      }
+
+      .button {
+        border: 1px solid white;
+        border-right: none;
+        float:left;
+        padding: 7px 20px;
+        font-size: 90%;
+        color: white;
+      }
+
+      #html {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+
+      #output {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-right: 1px solid white;
+      }
+
+      .active {
+        background-color: green;
+      }
+
+      .hovered {
+        background-color: black;
+      }
+
+      .panel {
+        width: 48%;
+        border-left: none;
+        border-bottom: none;
+        float:left;
+      }
+
+      textarea {
+        background-color: rgb(50,50,50);
+        color: white;
+        resize: none;
+        border-top: none;
+        border-color: black;
+        padding-left: 10px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      iframe {
+        border-top: none;
+        border-right: 1px solid grey;
+        background-color: #EEE;
+      }
+      
+      p {
+        color: blue;
+      }
+ 
+    </style>    
+
+  </head>
+
+  <body>
+
+  <!-- NAVBAR -->
+
+    <div id="navbar">
+
+      <div id="title">
+        My Coding Board
+      </div>
+
+      <div id="button-container">
+
+        <div id="html" class="button active">HTML
+        </div>
+
+        <div id="css" class="button">CSS
+        </div>
+
+        <div id="javascript" class="button">JavaScript
+        </div>
+
+        <div id="output" class="button active">Output
+        </div>
+
+      </div>
+
+    </div>
+
+  <!-- PANELS -->
+
+    <div id="panel-container">
+
+      <textarea id="htmlPanel" class="panel">
+          
+      <p id="para">Hello. Happy coding!</p>  
+
+      </textarea>
+      <textarea id="cssPanel" class="panel hidden">
+          
+      </textarea>
+      <textarea id="javascriptPanel" class="panel hidden">
+
+      </textarea>
+      <iframe id="outputPanel" class="panel"></iframe>
+
+    </div>
+
+    <script>
+
+      $(".button").hover(
+        function(){$(this).addClass("hovered")},
+        function(){$(this).removeClass("hovered")}
+      );
+
+      $(".button").click(function(){
+        $(this).toggleClass("active");
+        $(this).removeClass("hovered");
+
+        var Id = $(this).attr("id");
+        $("#" + Id + "Panel").toggleClass("hidden");
+        var num = 4- $(".hidden").length;
+        $(".panel").width($(window).width()/num - 10);
+      });
+
+      $(".panel").height($(window).height() - 50);
+
+      function synchronize(){
+        $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() + "</style></head><body>" + $("#htmlPanel").val() + "</body></html>");
+      
+        document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+      };
+
+      synchronize();
+
+      $("textarea").on('change keyup paste', function() {
+            synchronize();    
+          });
+     
+    </script>
+
+  </body>
+  
+</html>
